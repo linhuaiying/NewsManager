@@ -1,12 +1,13 @@
 <template>
 <el-container style="height: 100%; border: 1px solid #eee">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu :default-openeds="['1', '3']">
-      <el-submenu index="1">
-        <template slot="title"><i class="el-icon-message"></i>导航一</template>
+    <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+    <el-menu router>
+      <el-submenu index="/">
+        <template slot="title"><i class="el-icon-message"></i>主要功能</template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">用户管理</el-menu-item>
-          <el-menu-item index="1-2">新闻管理</el-menu-item>
+          <el-menu-item index="/">用户管理</el-menu-item>
+          <el-menu-item index="/2">新闻管理</el-menu-item>
+          <el-menu-item index="1-1">评论管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -22,20 +23,11 @@
           <el-dropdown-item>删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span>王小虎</span>
+      <el-button type="primary" round>登录</el-button>
     </el-header>
-    
+
     <el-main>
-      <el-table :data="userList">
-        <el-table-column prop="userName" label="用户名" width="140">
-        </el-table-column>
-        <el-table-column prop="nickName" label="昵称" width="120">
-        </el-table-column>
-        <el-table-column prop="sign" label="签名" width="140">
-        </el-table-column>
-        <el-table-column prop="sex" label="性别">
-        </el-table-column>
-      </el-table>
+     <router-view></router-view>
     </el-main>
   </el-container>
 </el-container>
@@ -43,18 +35,17 @@
 
 <style>
   .el-header {
-    background-color: #B3C0D1;
+    background-color: #ffffff;
     color: #333;
     line-height: 60px;
   }
   
   .el-aside {
-    color: #333;
+    color: #fff;
   }
 </style>
 
 <script>
-  import request from '@/utils/request.js'
   export default {
     data() {
       const item = {
@@ -68,10 +59,5 @@
         userList: null
       }
     },
-    mounted () {
-       request.get('/user/getUserList').then(res=>{
-          this.userList = res;
-       })
-    }
   };
 </script>
