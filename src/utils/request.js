@@ -28,7 +28,13 @@ request.interceptors.response.use(
         }
         // 兼容服务端返回的字符串数据
         if (typeof res === 'string') {
-            res = res ? JSON.parse(res) : res
+            if(res) {
+                try {
+                    JSON.parse(res)
+                } catch(e) {
+
+                }
+            }
         }
         return res;
     },

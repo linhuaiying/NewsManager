@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
-import HelloWorld from '../components/HelloWorld.vue'
-import index from '../views/index'
+import NewsMainView from '../views/NewsMainView.vue'
+import HomeMainView from '../views/HomeMainView.vue'
+import CommentsMainView from '../views/CommentsMainView'
 
 Vue.use(VueRouter)
 
@@ -14,33 +14,22 @@ const routes = [
     component: HomeView,
     children : [
       {
-        path: '/2',
-        name: 'HelloWord',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        //component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-        component: HelloWorld
+        path: '/user',
+        name: 'HomeMainView',
+        component: HomeMainView
       },
       {
-        path: '/',
-        name: 'index',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        //component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-        component: index
-      }]
+        path: '/news',
+        name: 'NewsMainView',
+        component: NewsMainView
+      },
+      {
+        path: '/comments',
+        name: 'CommentsMainView',
+        component: CommentsMainView
+      },
+     ]
   },
-  {
-    path: '/3',
-    name: 'index',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    //component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-    component: index
-  }
 ]
 
 const router = new VueRouter({

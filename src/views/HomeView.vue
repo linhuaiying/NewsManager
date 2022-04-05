@@ -1,13 +1,13 @@
 <template>
-<el-container style="height: 100%; border: 1px solid #eee">
+<el-container style="height: 100%">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu router>
       <el-submenu index="/">
-        <template slot="title"><i class="el-icon-message"></i>主要功能</template>
+        <template slot="title"><i class="el-icon-user"></i>主要功能</template>
         <el-menu-item-group>
-          <el-menu-item index="/">用户管理</el-menu-item>
-          <el-menu-item index="/2">新闻管理</el-menu-item>
-          <el-menu-item index="1-1">评论管理</el-menu-item>
+          <el-menu-item index="/user">用户管理</el-menu-item>
+          <el-menu-item index="/news">新闻管理</el-menu-item>
+          <el-menu-item index="/comments">评论管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -25,7 +25,7 @@
       </el-dropdown>
       <el-button type="primary" round>登录</el-button>
     </el-header>
-
+   
     <el-main>
      <router-view></router-view>
     </el-main>
@@ -39,9 +39,9 @@
     color: #333;
     line-height: 60px;
   }
-  
   .el-aside {
     color: #fff;
+    height: 100%;
   }
 </style>
 
@@ -56,7 +56,7 @@
       };
       return {
         tableData: Array(20).fill(item),
-        userList: null
+        userList: null,
       }
     },
   };
