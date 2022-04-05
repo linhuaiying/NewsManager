@@ -56,6 +56,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          request.post('/comment/delete',qs.stringify({
+             id
+          }))
+          .then(res=>{
+             console.log(res)
+             this.getCommentList()
+          });
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -67,13 +74,6 @@
             message: '已取消删除'
           });          
         });
-         request.post('/comment/delete',qs.stringify({
-           id
-       }))
-         .then(res=>{
-           console.log(res)
-           this.getCommentList()
-         })
       }
     }
 }

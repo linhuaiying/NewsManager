@@ -90,12 +90,19 @@
           this.newsList = res;
         })
       },
-     async onDelete(id) {
-        const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      onDelete(id) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          request.post('/news/deleteNews',qs.stringify({
+              newsId: id
+          }))
+          .then(res=>{
+            console.log(res)
+            this.getNewsList();
+          });
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -107,13 +114,6 @@
             message: '已取消删除'
           });          
         });
-         request.post('/news/deleteNews',qs.stringify({
-           newsId: id
-       }))
-         .then(res=>{
-           console.log(res)
-           this.getNewsList();
-         })
       },
       onSelectTitle() {
         if(this.title === null || this.title === '') {

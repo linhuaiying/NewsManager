@@ -66,6 +66,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          request.post('/user/delete',qs.stringify({
+            username: userName
+          }))
+          .then(res=>{
+            console.log(res)
+            this.getUserList();
+          });
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -77,13 +84,6 @@
             message: '已取消删除'
           });          
         });
-         request.post('/user/delete',qs.stringify({
-           username: userName
-       }))
-         .then(res=>{
-           console.log(res)
-           this.getUserList();
-         })
       }
     }
 }
