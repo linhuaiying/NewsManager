@@ -2,11 +2,12 @@
 <el-main>
       <el-col :span="24" class="center">
          <el-input
-           placeholder="按新闻ID搜索">
-           <el-button slot="append" icon="el-icon-search" circle></el-button>
+           placeholder="按新闻ID搜索"
+           v-model="newsId">
+           <el-button slot="append" icon="el-icon-search" circle @click="onSelectNewsId"></el-button>
          </el-input>
       </el-col>
-      <el-table :data="commentList">
+      <el-table :data="currentList">
         <el-table-column prop="newsId" label="新闻ID">
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="200">
@@ -23,10 +24,15 @@
          </template>
         </el-table-column>
       </el-table>
-      <el-button-group style="marginTop: 20px">
-        <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
-        <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-      </el-button-group>
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="5"
+      layout="prev, pager, next, jumper"
+      :total="totalsize"
+      style="marginTop: 20px">
+    </el-pagination>
 </el-main>
 </template>
 
@@ -38,7 +44,11 @@
     name: 'CommentsMainView',
     data() {
       return {
-        commentList: null
+        commentList: null,
+        newsId: '',
+        currentPage: 1,
+        totalsize: 0,
+        currentList: null,
       }
     },
     mounted () {
@@ -48,10 +58,12 @@
       getCommentList() {
         request.get('comment/getAllComments').then(res=>{
           this.commentList = res;
+          this.currentList = this.commentList.slice(0, 5);
+          this.totalsize = this.commentList.length;
         })
       },
       async onDelete(id) {
-        const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        const confirmResult = await this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -74,6 +86,26 @@
             message: '已取消删除'
           });          
         });
+      },
+      onSelectNewsId() {
+         if(this.newsId === null || this.newsId === '') {
+          this.getCommentList();
+          return;
+        }
+        request.post('/comment/getComments', qs.stringify({
+            newsId: this.newsId
+          }))
+         .then(res=>{
+           console.log(res)
+           this.commentList = res;
+         })
+      },
+       handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.currentList = this.commentList.slice((val - 1)*5, (val - 1)*5 + 5);
       }
     }
 }

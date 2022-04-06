@@ -4,6 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import NewsMainView from '../views/NewsMainView.vue'
 import HomeMainView from '../views/HomeMainView.vue'
 import CommentsMainView from '../views/CommentsMainView'
+import AddUserView from '../views/AddUserView.vue'
+import AddNewsView from '../views/AddNewsView.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,16 @@ const routes = [
         name: 'CommentsMainView',
         component: CommentsMainView
       },
+      {
+        path: '/user/addUser',
+        name: 'AddUserView',
+        component: AddUserView
+      },
+      {
+        path: '/news/addNews',
+        name: 'AddNewsView',
+        component: AddNewsView
+      }
      ]
   },
 ]

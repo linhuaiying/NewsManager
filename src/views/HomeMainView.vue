@@ -1,15 +1,23 @@
 <template>
 <el-main>
       <el-row  class="center">
-         <el-col :span="20">
+        <el-col :span="9">
          <el-input
-           placeholder="按用户名或昵称搜索">
-           <el-button slot="append" icon="el-icon-search" circle></el-button>
+           placeholder="按用户名搜索"
+           v-model="userName">
+           <el-button slot="append" icon="el-icon-search" circle @click="onSelectUserName"></el-button>
          </el-input>
         </el-col>
-        <el-button type="primary">新增用户</el-button>
+        <el-col :span="9" class="right">
+         <el-input
+           placeholder="按昵称搜索"
+           v-model="nickName">
+           <el-button slot="append" icon="el-icon-search" circle @click="onSelectNickName"></el-button>
+         </el-input>
+        </el-col>
+        <el-button type="primary" @click="$router.push('/user/addUser')">新增用户</el-button>
       </el-row>
-      <el-table :data="userList">
+      <el-table :data="currentList">
         <el-table-column prop="userName" label="用户名" width="200">
         </el-table-column>
         <el-table-column prop="nickName" label="昵称" width="200">
@@ -26,10 +34,15 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button-group style="marginTop: 20px">
-        <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
-        <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-      </el-button-group>
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="5"
+      layout="prev, pager, next, jumper"
+      :total="totalsize"
+      style="marginTop: 20px">
+    </el-pagination>
 </el-main>
 </template>
 
@@ -49,7 +62,17 @@
       return {
         tableData: Array(20).fill(item),
         userList: null,
+        userName: '',
+        nickName: '',
+        currentPage: 1,
+        totalsize: 0,
+        currentList: null,
       }
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.getUserList() //vm等于this
+      });   
     },
     mounted () {
        this.getUserList()
@@ -58,10 +81,12 @@
        getUserList() {
         request.get('/user/getUserList').then(res=>{
           this.userList = res;
+          this.currentList = this.userList.slice(0, 5);
+          this.totalsize = this.userList.length;
         })
       },
       async onDelete(userName) {
-        const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        const confirmResult = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -84,6 +109,39 @@
             message: '已取消删除'
           });          
         });
+      },
+       onSelectUserName() {
+        if(this.userName === null || this.userName === '') {
+          this.getUserList();
+          return;
+        }
+        request.post('/user/getUsersListByUserName', qs.stringify({
+            username: this.userName
+          }))
+         .then(res=>{
+           console.log(res)
+           this.userList = res;
+         })
+      },
+      onSelectNickName() {
+        if(this.nickName === null || this.nickName === '') {
+          this.getUserList();
+          return;
+        }
+        request.post('/user/getUsersListByNickName', qs.stringify({
+            keyWords: this.nickName
+        }))
+         .then(res=>{
+           console.log(res)
+           this.userList = res;
+         })
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.currentList = this.userList.slice((val - 1)*5, (val - 1)*5 + 5);
       }
     }
 }
@@ -92,5 +150,12 @@
  .center {
     margin-top: 15px;
     margin-bottom: 30px;
+  }
+  .center {
+    margin-top: 15px;
+    margin-bottom: 30px;
+  }
+  .right {
+    margin-left: 20px;
   }
 </style>

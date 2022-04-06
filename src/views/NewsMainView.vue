@@ -15,9 +15,9 @@
            <el-button slot="append" icon="el-icon-search" circle @click="onSelectUserName"></el-button>
          </el-input>
         </el-col>
-        <el-button type="primary">新增新闻</el-button>
+        <el-button type="primary" @click="$router.push('/news/addNews')">新增新闻</el-button>
       </el-row>
-    <el-table :data="newsList" style="width: 100%">
+    <el-table :data="currentList" style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
@@ -60,10 +60,15 @@
       </template>
     </el-table-column>
     </el-table>
-    <el-button-group style="marginTop: 20px">
-      <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
-      <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-    </el-button-group>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="5"
+      layout="prev, pager, next, jumper"
+      :total="totalsize"
+      style="marginTop: 20px">
+    </el-pagination>
 </el-main>
 </template>
 
@@ -79,7 +84,15 @@
         newsList: null,
         title: null,
         userName: null,
+        currentPage: 1,
+        totalsize: 0,
+        currentList: null,
       }
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.getNewsList() //vm等于this
+      });   
     },
     mounted () {
       this.getNewsList()
@@ -88,10 +101,12 @@
       getNewsList() {
         request.get('/news/getNewsList').then(res=>{
           this.newsList = res;
+          this.currentList = this.newsList.slice(0, 5);
+          this.totalsize = this.newsList.length;
         })
       },
       onDelete(id) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该新闻, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -144,6 +159,13 @@
            console.log(res)
            this.newsList = res;
          })
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.currentList = this.newsList.slice((val - 1)*5, (val - 1)*5 + 5);
       }
    }
   };
