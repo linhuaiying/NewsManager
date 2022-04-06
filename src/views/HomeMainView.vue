@@ -121,6 +121,8 @@
          .then(res=>{
            console.log(res)
            this.userList = res;
+           this.currentList = this.userList.slice(0, 5);
+           this.totalsize = this.userList.length;
          })
       },
       onSelectNickName() {
@@ -134,6 +136,8 @@
          .then(res=>{
            console.log(res)
            this.userList = res;
+           this.currentList = this.userList.slice(0, 5);
+           this.totalsize = this.userList.length;
          })
       },
       handleSizeChange(val) {
@@ -147,10 +151,6 @@
 }
 </script>
 <style>
- .center {
-    margin-top: 15px;
-    margin-bottom: 30px;
-  }
   .center {
     margin-top: 15px;
     margin-bottom: 30px;

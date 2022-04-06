@@ -98,6 +98,8 @@
          .then(res=>{
            console.log(res)
            this.commentList = res;
+           this.currentList = this.commentList.slice(0, 5);
+           this.totalsize = this.commentList.length;
          })
       },
        handleSizeChange(val) {

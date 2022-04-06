@@ -6,17 +6,23 @@ import HomeMainView from '../views/HomeMainView.vue'
 import CommentsMainView from '../views/CommentsMainView'
 import AddUserView from '../views/AddUserView.vue'
 import AddNewsView from '../views/AddNewsView.vue'
+import LoginView from '../views/LoginView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
+    name: 'LoginView',
+    component: LoginView
+  },
+  {
+    path: '/home',
     name: 'home',
     component: HomeView,
     children : [
       {
-        path: '/user',
+        path: '/home',
         name: 'HomeMainView',
         component: HomeMainView
       },
@@ -41,7 +47,7 @@ const routes = [
         component: AddNewsView
       }
      ]
-  },
+  }
 ]
 
 const router = new VueRouter({

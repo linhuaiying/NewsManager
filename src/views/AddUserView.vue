@@ -1,5 +1,5 @@
 <template>
-<el-col :span="10" class="center">
+<el-col :span="10" class="addUser">
  <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="large">
   <el-form-item label="用户名" prop="userName">
     <el-input v-model.number="ruleForm.userName"></el-input>
@@ -103,8 +103,8 @@
           }))
           .then(res=>{
             console.log(res)
+            router.push('/home')
           });
-          router.push('/user')
           } else {
             console.log('error submit!!');
             return false;
@@ -118,7 +118,7 @@
   }
 </script>
 <style>
- .center {
-     margin-left: 25%;
+ .addUser {
+     margin-left: 25%
  }
 </style>

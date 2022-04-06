@@ -143,6 +143,8 @@
          .then(res=>{
            console.log(res)
            this.newsList = res;
+           this.currentList = this.newsList.slice(0, 5);
+           this.totalsize = this.newsList.length;
          })
       },
       onSelectUserName() {
@@ -158,6 +160,8 @@
          .then(res=>{
            console.log(res)
            this.newsList = res;
+           this.currentList = this.newsList.slice(0, 5);
+           this.totalsize = this.newsList.length;
          })
       },
       handleSizeChange(val) {
